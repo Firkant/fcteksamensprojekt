@@ -3,7 +3,7 @@
     <table>
       <tr>
         <td>
-          <button @click="oneOf">One of</button>
+          <button @click="OneOf">One of</button>
         </td>
         <td>
           <button @click="SameFaction">Same Faction</button>
@@ -12,7 +12,7 @@
           <button @click="OppositeFaction">Opposite Faction</button>
         </td>
         <td>
-          <button style="color: darkseagreen" @click="scanResident">
+          <button style="color: darkseagreen" @click="ScanResident">
             Resident
           </button>
         </td>
@@ -67,20 +67,20 @@
           </svg>
         </td>
         <td>
-          <button style="color: indianred" @click="scanPersonoid">
+          <button style="color: indianred" @click="ScanPersonoid">
             Personoid
           </button>
         </td>
       </tr>
       <tr>
         <td>
-          <p>{{ arrayOfChances[0].toFixed(1) }}</p>
+          <p>{{ arrayOfChances[0].toFixed(1) }}%</p>
         </td>
         <td>
-          <p>{{ arrayOfChances[1].toFixed(1) }}</p>
+          <p>{{ arrayOfChances[1].toFixed(1) }}%</p>
         </td>
         <td>
-          <p>{{ arrayOfChances[2].toFixed(1) }}</p>
+          <p>{{ arrayOfChances[2].toFixed(1) }}%</p>
         </td>
         <td></td>
       </tr>
@@ -134,18 +134,18 @@
           </svg>
         </td>
         <td>
-          <img src="../assets/reset.svg" alt="reset" @click="reset" />
+          <img src="../assets/reset.svg" alt="reset" @click="Reset" />
         </td>
       </tr>
       <tr>
         <td>
-          <p>{{ arrayOfChances[3].toFixed(1) }}</p>
+          <p>{{ arrayOfChances[3].toFixed(1) }}%</p>
         </td>
         <td>
-          <p>{{ arrayOfChances[4].toFixed(1) }}</p>
+          <p>{{ arrayOfChances[4].toFixed(1) }}%</p>
         </td>
         <td>
-          <p>{{ arrayOfChances[5].toFixed(1) }}</p>
+          <p>{{ arrayOfChances[5].toFixed(1) }}%</p>
         </td>
         <td></td>
       </tr>
@@ -170,14 +170,14 @@ export default defineComponent({
       [false, false, false, false, true, false],
       [false, false, false, false, false, true],
     ]);
-    const arrayOfChances = ref([0, 0, 0, 0, 0, 0]);
+    const arrayOfChances = ref([33.3, 33.3, 33.3, 33.3, 33.3, 33.3]);
 
     function SameFaction(): void {
       for (let i = 0; i < 6; i++) {
         for (let j = 0; j < 6; j++) {
           if (arrayOfPressed.value[i] && arrayOfPressed.value[j] && i != j) {
             if (arrayOfSuspects.value[i][j]) {
-              scanResident();
+              ScanResident();
             }
           }
         }
@@ -186,7 +186,7 @@ export default defineComponent({
     }
 
     function OppositeFaction(): void {
-      oneOf();
+      OneOf();
       for (let i = 0; i < 6; i++) {
         for (let j = 0; j < 6; j++) {
           if (arrayOfPressed.value[i] && arrayOfPressed.value[j] && i != j) {
@@ -212,27 +212,32 @@ export default defineComponent({
         if (arrayOfSuspects.value[4][i] == false) red++;
         if (arrayOfSuspects.value[5][i] == false) pink++;
       }
-      const sum = white + yellow + green + blue + red + pink;
-      arrayOfChances.value[0] = (white / sum) * 100 * 2;
-      arrayOfChances.value[1] = (yellow / sum) * 100 * 2;
-      arrayOfChances.value[2] = (green / sum) * 100 * 2;
-      arrayOfChances.value[3] = (blue / sum) * 100 * 2;
-      arrayOfChances.value[4] = (red / sum) * 100 * 2;
-      arrayOfChances.value[5] = (pink / sum) * 100 * 2;
+      const sumPercent = (white + yellow + green + blue + red + pink) * 100 * 2;
+      arrayOfChances.value[0] = (white / sumPercent)
+      arrayOfChances.value[1] = (yellow / sumPercent)
+      arrayOfChances.value[2] = (green / sumPercent)
+      arrayOfChances.value[3] = (blue / sumPercent)
+      arrayOfChances.value[4] = (red / sumPercent)
+      arrayOfChances.value[5] = (pink / sumPercent)
 
       for (let i = 0; i < 6; i++) arrayOfPressed.value[i] = false;
     }
 
-    function oneOf(): void {
-      for (let i = 0; i < 6; i++) {
-        for (let j = 0; j < 6; j++) {
-          if (!arrayOfPressed.value[i] && !arrayOfPressed.value[j])
-            arrayOfSuspects.value[i][j] = true;
+    function OneOf(): void {
+      if(!arrayOfPressed.value[0] && !arrayOfPressed.value[1] && !arrayOfPressed.value[2] && !arrayOfPressed.value[3] && !arrayOfPressed.value[4] && !arrayOfPressed.value[5]){
+      }else{
+        for (let i = 0; i < 6; i++) {
+          for (let j = 0; j < 6; j++) {
+            if (!arrayOfPressed.value[i] && !arrayOfPressed.value[j])
+              arrayOfSuspects.value[i][j] = true;
+          }
         }
       }
+
       ChanceCalc();
     }
-    function scanResident(): void {
+    function ScanResident(): void {
+
       for (let i = 0; i < 6; i++) {
         for (let j = 0; j < 6; j++) {
           if (arrayOfPressed.value[i] || arrayOfPressed.value[j]) {
@@ -243,17 +248,20 @@ export default defineComponent({
       ChanceCalc();
     }
 
-    function scanPersonoid(): void {
-      for (let i = 0; i < 6; i++) {
+    function ScanPersonoid(): void {
+      if(!arrayOfPressed.value[0] && !arrayOfPressed.value[1] && !arrayOfPressed.value[2] && !arrayOfPressed.value[3] && !arrayOfPressed.value[4] && !arrayOfPressed.value[5]){
+      }else {
         for (let j = 0; j < 6; j++) {
-          if (!(arrayOfPressed.value[i] || arrayOfPressed.value[j])) {
-            arrayOfSuspects.value[i][j] = true;
+          for (let i = 0; i < 6; i++) {
+            if (!(arrayOfPressed.value[i] || arrayOfPressed.value[j])) {
+              arrayOfSuspects.value[i][j] = true;
+            }
           }
         }
       }
       ChanceCalc();
     }
-    function reset(): void {
+    function Reset(): void {
       arrayOfSuspects.value = [
         [true, false, false, false, false, false],
         [false, true, false, false, false, false],
@@ -267,10 +275,10 @@ export default defineComponent({
     }
 
     return {
-      oneOf,
-      scanResident,
-      scanPersonoid,
-      reset,
+      OneOf,
+      ScanResident,
+      ScanPersonoid,
+      Reset,
       SameFaction,
       OppositeFaction,
       arrayOfSuspects,
@@ -295,7 +303,6 @@ button {
   background-color: #333333;
   border-radius: 4px;
   font-size: 16px;
-  font-family: "Arial Rounded MT Bold";
   color: whitesmoke;
 }
 </style>

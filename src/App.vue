@@ -6,7 +6,7 @@
 
 <style lang="scss">
 #app {
-  margin: 0px;
+  margin: 0;
   width: 400px;
   height: 400px;
   font-family: Avenir, Helvetica, Arial, sans-serif;
